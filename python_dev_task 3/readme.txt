@@ -1,4 +1,4 @@
-##README – Run PDF-to-Audio Converter (Tkinter App)
+# README – Run PDF-to-Audio Converter (Tkinter App)
 1. Create Virtual Environment
 
 Open CMD inside the project folder and run:
@@ -38,4 +38,5 @@ deactivate
 
 
 C
+
 
