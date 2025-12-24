@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% block title %}My Bookings | Brew & Book Cafe{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="text-center">
+                <h1 class="fw-bold display-5 mb-3 text-coffee">
+                    <i class="fas fa-bookmark me-2"></i>My Reservations
+                </h1>
+                <p class="lead" style="color: var(--coffee-dark);">Manage your cafe table bookings</p>
+            </div>
+        </div>
+    </div>
+
+    {% if bookings %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="alert alert-success">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-coffee fa-2x me-3" style="color: var(--brown);"></i>
+                    <div>
+                        <h5 class="mb-1 text-coffee">You have {{ bookings|length }} active reservation{{ 's' if bookings|length > 1 else '' }}</h5>
+                        <p class="mb-0" style="color: var(--coffee-dark);">All your upcoming cafe visits are listed below</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for booking in bookings %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card booking-card h-100">
+                <div class="card-header" style="background: linear-gradient(135deg, var(--brown) 0%, var(--coffee-dark) 100%);">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 text-white">
+                            <i class="fas fa-chair me-2"></i>
+                            Table {{ booking.table_number }}
+                        </h5>
+                        <span class="badge bg-coffee-light text-coffee">
+                            #{{ booking.id }}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <div class="seat-image table-image mx-auto"
+                             style="background-image: url('https://cdn-icons-png.flaticon.com/512/2972/297254{{ booking.table_number }}.png');">
+                        </div>
+                    </div>
+                    
+                    <div class="booking-details">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-calendar me-3" style="color: var(--brown); font-size: 1.2rem;"></i>
+                            <div>
+                                <small class="text-muted d-block">Date</small>
+                                <strong class="text-coffee">{{ booking.date }}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-clock me-3" style="color: var(--brown); font-size: 1.2rem;"></i>
+                            <div>
+                                <small class="text-muted d-block">Time Slot</small>
+                                <strong class="text-coffee">{{ booking.time_slot }}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="fas fa-users me-3" style="color: var(--brown); font-size: 1.2rem;"></i>
+                            <div>
+                                <small class="text-muted d-block">Capacity</small>
+                                <strong class="text-coffee">{{ booking.table_number * 2 }} persons</strong>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="/cancel/{{ booking.id }}" 
+                           class="btn btn-danger py-2" 
+                           onclick="return confirm('Are you sure you want to cancel this reservation?')">
+                            <i class="fas fa-times-circle me-2"></i>
+                            Cancel Booking
+                        </a>
+                        <button class="btn btn-outline-primary py-2" disabled>
+                            <i class="fas fa-edit me-2"></i>
+                            Modify Reservation
+                        </button>
+                    </div>
+                </div>
+                <div class="card-footer" style="background: rgba(215, 193, 169, 0.3);">
+                    <small class="text-coffee">
+                        <i class="fas fa-calendar-plus me-1"></i>
+                        Booked on {{ booking.created_at }}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card card-glass text-center p-5">
+                <div class="mb-4">
+                    <i class="fas fa-calendar-times fa-5x" style="color: var(--coffee-dark);"></i>
+                </div>
+                <h3 class="mb-3 text-coffee">No Reservations Yet</h3>
+                <p class="mb-4" style="color: var(--coffee-dark);">
+                    You haven't booked any tables yet. Reserve your first table and enjoy our cozy cafe atmosphere!
+                </p>
+                <a href="/book" class="btn btn-primary py-2 px-4">
+                    <i class="fas fa-plus-circle me-2"></i>
+                    Book Your First Table
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Statistics Card -->
+    {% if bookings %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card card-glass">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 text-coffee">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        Your Cafe Statistics
+                    </h5>
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3 rounded" style="background: rgba(139, 69, 19, 0.1); border: 2px solid var(--coffee-medium);">
+                                <h2 class="fw-bold" style="color: var(--brown);">
+                                    {{ bookings|length }}
+                                </h2>
+                                <p class="mb-0 text-coffee">Total Bookings</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3 rounded" style="background: rgba(139, 69, 19, 0.1); border: 2px solid var(--coffee-medium);">
+                                {% set upcoming = [] %}
+                                {% for booking in bookings %}
+                                    {% if booking.date >= today %}
+                                        {% set _ = upcoming.append(1) %}
+                                    {% endif %}
+                                {% endfor %}
+                                <h2 class="fw-bold" style="color: var(--brown);">
+                                    {{ upcoming|length }}
+                                </h2>
+                                <p class="mb-0 text-coffee">Upcoming</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3 rounded" style="background: rgba(139, 69, 19, 0.1); border: 2px solid var(--coffee-medium);">
+                                {% set tables_tried = [] %}
+                                {% for booking in bookings %}
+                                    {% if booking.table_number not in tables_tried %}
+                                        {% set _ = tables_tried.append(booking.table_number) %}
+                                    {% endif %}
+                                {% endfor %}
+                                <h2 class="fw-bold" style="color: var(--brown);">
+                                    {{ tables_tried|length }}/5
+                                </h2>
+                                <p class="mb-0 text-coffee">Tables Tried</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3 rounded" style="background: rgba(139, 69, 19, 0.1); border: 2px solid var(--coffee-medium);">
+                                {% set weekend_bookings = 0 %}
+                                {% for booking in bookings %}
+                                    {% set booking_date = booking.date %}
+                                    {% set day_num = booking_date[-2:]|int %}
+                                    {% if day_num % 7 >= 5 %}
+                                        {% set weekend_bookings = weekend_bookings + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                                <h2 class="fw-bold" style="color: var(--brown);">
+                                    {{ weekend_bookings }}
+                                </h2>
+                                <p class="mb-0 text-coffee">Weekend Visits</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Cafe Tips -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card card-glass">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 text-coffee">
+                        <i class="fas fa-mug-hot me-2"></i>
+                        Cafe Tips & Recommendations
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-crown me-3 mt-1" style="color: var(--camel); font-size: 1.5rem;"></i>
+                                <div>
+                                    <h6 class="text-coffee">Best Time to Visit</h6>
+                                    <p class="small text-muted mb-0">Weekday mornings are usually quieter. Perfect for focused work or reading.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-star me-3 mt-1" style="color: var(--camel); font-size: 1.5rem;"></i>
+                                <div>
+                                    <h6 class="text-coffee">Staff Pick</h6>
+                                    <p class="small text-muted mb-0">Try our signature Caramel Macchiato with a fresh croissant.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-gift me-3 mt-1" style="color: var(--camel); font-size: 1.5rem;"></i>
+                                <div>
+                                    <h6 class="text-coffee">Loyalty Rewards</h6>
+                                    <p class="small text-muted mb-0">Every 5th booking gets you a free coffee of your choice!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <a href="/book" class="btn btn-primary px-5 py-3 me-md-2">
+                    <i class="fas fa-plus me-2"></i>Book Another Table
+                </a>
+                <button class="btn btn-outline-primary px-5 py-3" onclick="window.print()">
+                    <i class="fas fa-print me-2"></i>Print Reservations
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

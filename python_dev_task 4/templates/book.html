@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Book a Table | Cafe Booking{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="text-center">
+                <h1 class="fw-bold display-5 mb-3" style="color: var(--primary-color);">
+                    <i class="fas fa-calendar-alt me-2"></i>Book Your Table
+                </h1>
+                <p class="lead">Reserve your perfect spot at our cozy cafe</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Booking Form -->
+        <div class="col-lg-6 mb-4">
+            <div class="card card-glass p-4 h-100">
+                <h3 class="mb-4 fw-bold">
+                    <i class="fas fa-pencil-alt me-2"></i>Booking Details
+                </h3>
+                
+                <form method="POST" action="/book">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-calendar-day me-2"></i>Select Date
+                        </label>
+                        <input type="date" name="date" class="form-control" 
+                               min="{{ today }}" required id="booking-date">
+                        <small class="text-muted">Bookings available for today and future dates</small>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-chair me-2"></i>Select Table
+                            </label>
+                            <select name="table" class="form-control" required id="table-select">
+                                <option value="">Choose a table...</option>
+                                {% for t in tables %}
+                                <option value="{{ t }}">Table {{ t }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-clock me-2"></i>Select Time
+                            </label>
+                            <select name="time" class="form-control" required id="time-select">
+                                <option value="">Choose a time slot...</option>
+                                {% for t in times %}
+                                <option value="{{ t }}">{{ t }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Table Preview -->
+                    <div class="mb-4 text-center">
+                        <div id="table-image" class="table-image mx-auto" 
+                             style="background-image: url('https://cdn-icons-png.flaticon.com/512/2972/2972541.png');">
+                        </div>
+                        <p class="small text-muted">Table preview</p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-3">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Confirm Booking
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Available Tables -->
+        <div class="col-lg-6">
+            <div class="card card-glass p-4 h-100">
+                <h3 class="mb-4 fw-bold">
+                    <i class="fas fa-th-list me-2"></i>Available Tables
+                </h3>
+                
+                <div class="row">
+                    {% for table in tables %}
+                    <div class="col-6 col-md-4 mb-3">
+                        <div class="booking-card text-center p-3">
+                            <div class="seat-image table-image mb-2 mx-auto"
+                                 style="background-image: url('https://cdn-icons-png.flaticon.com/512/2972/297254{{ table }}.png');">
+                            </div>
+                            <h5 class="fw-bold">Table {{ table }}</h5>
+                            <p class="small text-muted mb-2">
+                                <i class="fas fa-user-friends me-1"></i>
+                                Seats: {{ table * 2 }}
+                            </p>
+                            <div class="availability-badge">
+                                {% set available = true %}
+                                {% for booking in bookings %}
+                                    {% if booking.table_number == table and booking.date == today %}
+                                        <span class="badge bg-warning">Partially Booked</span>
+                                        {% set available = false %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if available %}
+                                    <span class="badge bg-success">Available</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Legend -->
+                <div class="mt-4 pt-3 border-top">
+                    <h6 class="fw-bold mb-3">Legend:</h6>
+                    <div class="row">
+                        <div class="col-6">
+                            <span class="badge bg-success me-2">●</span>
+                            <small>Available</small>
+                        </div>
+                        <div class="col-6">
+                            <span class="badge bg-warning me-2">●</span>
+                            <small>Partially Booked</small>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <span class="badge bg-danger me-2">●</span>
+                            <small>Fully Booked</small>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <span class="badge bg-info me-2">●</span>
+                            <small>Your Booking</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Tips -->
+                <div class="mt-4 pt-3 border-top">
+                    <h6 class="fw-bold mb-3">
+                        <i class="fas fa-lightbulb me-2"></i>Quick Tips
+                    </h6>
+                    <div class="alert alert-info">
+                        <small>
+                            <i class="fas fa-info-circle me-2"></i>
+                            • Tables are reserved for 2-hour slots<br>
+                            • You can cancel up to 1 hour before<br>
+                            • Each table has a maximum capacity
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Set minimum date to today
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = '{{ today }}';
+        const dateInput = document.getElementById('booking-date');
+        if (dateInput) {
+            dateInput.min = today;
+            dateInput.value = today;
+        }
+        
+        // Update table image when table is selected
+        const tableSelect = document.getElementById('table-select');
+        const tableImage = document.getElementById('table-image');
+        
+        if (tableSelect && tableImage) {
+            tableSelect.addEventListener('change', function() {
+                if (this.value) {
+                    tableImage.style.backgroundImage = `url('https://cdn-icons-png.flaticon.com/512/2972/297254${this.value}.png')`;
+                    tableImage.classList.add('pulse');
+                    setTimeout(() => tableImage.classList.remove('pulse'), 1000);
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

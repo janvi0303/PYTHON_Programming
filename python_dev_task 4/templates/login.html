@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Login | Brew & Book Cafe{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-80">
+        <div class="col-md-6 col-lg-5">
+            <div class="card card-glass p-5">
+                <div class="text-center mb-4">
+                    <div class="mb-3">
+                        <i class="fas fa-coffee fa-4x" style="color: var(--brown);"></i>
+                    </div>
+                    <h2 class="fw-bold text-coffee">Welcome Back!</h2>
+                    <p class="text-muted">Sign in to reserve your perfect spot</p>
+                </div>
+
+                <form method="POST" action="/login">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-coffee">
+                            <i class="fas fa-envelope me-2"></i>Email Address
+                        </label>
+                        <input type="email" name="email" class="form-control" 
+                               placeholder="your.email@example.com" required
+                               style="background: rgba(255, 255, 255, 0.95);">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-coffee">
+                            <i class="fas fa-lock me-2"></i>Password
+                        </label>
+                        <input type="password" name="password" class="form-control" 
+                               placeholder="Enter your password" required
+                               style="background: rgba(255, 255, 255, 0.95);">
+                        <div class="text-end mt-2">
+                            <a href="#" class="text-decoration-none" style="color: var(--brown);">
+                                <small><i class="fas fa-key me-1"></i>Forgot password?</small>
+                            </a>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-3 mb-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </button>
+
+                    <div class="text-center">
+                        <p class="mb-0 text-coffee">
+                            New to our cafe?
+                            <a href="/register" class="fw-bold" style="color: var(--brown);">
+                                Create an account
+                            </a>
+                        </p>
+                    </div>
+                </form>
+
+                <hr class="my-4" style="border-color: var(--coffee-medium);">
+
+                <div class="text-center">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Book tables, enjoy coffee, repeat ☕
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-5 d-none d-md-block">
+            <div class="text-center p-4">
+                <div class="position-relative">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3082/3082383.png" 
+                         alt="Coffee Illustration" class="img-fluid mb-4" style="max-height: 300px;">
+                    <div class="position-absolute top-0 start-0">
+                        <i class="fas fa-coffee-bean fa-2x" style="color: var(--coffee-dark); opacity: 0.7;"></i>
+                    </div>
+                    <div class="position-absolute top-0 end-0">
+                        <i class="fas fa-cookie fa-2x" style="color: var(--camel); opacity: 0.7;"></i>
+                    </div>
+                </div>
+                <h4 class="mt-4 fw-bold text-coffee">
+                    Your Perfect Cafe Experience
+                </h4>
+                <p class="text-coffee" style="opacity: 0.8;">
+                    Reserve your table and enjoy our premium coffee<br>
+                    in a cozy, aromatic atmosphere
+                </p>
+                <div class="mt-4">
+                    <span class="badge bg-coffee-medium me-2 p-2">
+                        <i class="fas fa-wifi me-1"></i>Free WiFi
+                    </span>
+                    <span class="badge bg-coffee-medium me-2 p-2">
+                        <i class="fas fa-plug me-1"></i>Charging
+                    </span>
+                    <span class="badge bg-coffee-medium p-2">
+                        <i class="fas fa-mug-hot me-1"></i>Premium Coffee
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

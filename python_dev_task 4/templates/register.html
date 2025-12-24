@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Register | Brew & Book Cafe{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-80">
+        <div class="col-md-8 col-lg-7">
+            <div class="card card-glass p-5">
+                <div class="text-center mb-4">
+                    <div class="mb-3">
+                        <i class="fas fa-mug-hot fa-4x" style="color: var(--brown);"></i>
+                    </div>
+                    <h2 class="fw-bold text-coffee">Join Our Cafe Community</h2>
+                    <p class="text-muted">Create an account to start booking tables</p>
+                </div>
+
+                <form method="POST" action="/register">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-coffee">
+                            <i class="fas fa-envelope me-2"></i>Email Address
+                        </label>
+                        <input type="email" name="email" class="form-control" 
+                               placeholder="example@email.com" required
+                               style="background: rgba(255, 255, 255, 0.95);">
+                        <small class="text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-coffee">
+                            <i class="fas fa-lock me-2"></i>Password
+                        </label>
+                        <input type="password" name="password" id="password" class="form-control" 
+                               placeholder="Create a strong password" required
+                               style="background: rgba(255, 255, 255, 0.95);">
+                        
+                        <!-- Password Requirements -->
+                        <div class="mt-4 p-3 rounded" style="background: rgba(215, 193, 169, 0.2); border: 1px solid var(--coffee-medium);">
+                            <small class="d-block fw-bold mb-2 text-coffee">
+                                <i class="fas fa-check-circle me-2"></i>Password Requirements:
+                            </small>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="password-requirement" id="req-length">
+                                        <i class="fas fa-circle me-1" style="font-size: 6px;"></i>
+                                        At least 8 characters
+                                    </div>
+                                    <div class="password-requirement" id="req-uppercase">
+                                        <i class="fas fa-circle me-1" style="font-size: 6px;"></i>
+                                        At least 1 uppercase letter
+                                    </div>
+                                    <div class="password-requirement" id="req-lowercase">
+                                        <i class="fas fa-circle me-1" style="font-size: 6px;"></i>
+                                        At least 1 lowercase letter
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="password-requirement" id="req-number">
+                                        <i class="fas fa-circle me-1" style="font-size: 6px;"></i>
+                                        At least 1 number
+                                    </div>
+                                    <div class="password-requirement" id="req-special">
+                                        <i class="fas fa-circle me-1" style="font-size: 6px;"></i>
+                                        At least 1 special character
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-3 mb-3">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </button>
+
+                    <div class="text-center">
+                        <p class="mb-0 text-coffee">
+                            Already have an account?
+                            <a href="/login" class="fw-bold" style="color: var(--brown);">
+                                Sign in here
+                            </a>
+                        </p>
+                    </div>
+                </form>
+
+                <hr class="my-4" style="border-color: var(--coffee-medium);">
+
+                <div class="text-center">
+                    <h6 class="fw-bold text-coffee mb-3">
+                        <i class="fas fa-star me-2"></i>Why Join Us?
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3 rounded" style="background: rgba(139, 69, 19, 0.1);">
+                                <i class="fas fa-bolt fa-2x mb-2" style="color: var(--brown);"></i>
+                                <h6 class="text-coffee">Quick Booking</h6>
+                                <p class="small text-muted mb-0">Reserve in seconds</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3 rounded" style="background: rgba(193, 154, 107, 0.1);">
+                                <i class="fas fa-shield-alt fa-2x mb-2" style="color: var(--brown);"></i>
+                                <h6 class="text-coffee">Secure</h6>
+                                <p class="small text-muted mb-0">Your data is protected</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3 rounded" style="background: rgba(183, 147, 122, 0.1);">
+                                <i class="fas fa-percent fa-2x mb-2" style="color: var(--brown);"></i>
+                                <h6 class="text-coffee">Member Rewards</h6>
+                                <p class="small text-muted mb-0">Earn with every booking</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
